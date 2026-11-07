@@ -64,9 +64,12 @@ pipeline {
       }
     }
 
-    stage('Push') {
+        stage('Push') {
       when {
-        branch 'main'
+        anyOf {
+          branch 'main'
+          branch 'origin/main'
+        }
       }
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DH_USER', passwordVariable: 'DH_TOKEN')]) {
