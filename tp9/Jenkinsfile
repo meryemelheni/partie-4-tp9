@@ -24,8 +24,10 @@ pipeline {
       agent {
         docker { image 'node:24-alpine'; reuseNode true }
       }
-      steps {
-        sh 'npm install'
+            steps {
+        dir('tp9') {
+          sh 'npm install'
+        }
       }
     }
 
@@ -35,24 +37,30 @@ pipeline {
           agent {
             docker { image 'node:24-alpine'; reuseNode true }
           }
-          steps {
-            sh 'npm pkg set scripts.lint="eslint ." && npm run lint || true'
+                    steps {
+            dir('tp9') {
+              sh 'npm pkg set scripts.lint="eslint ." && npm run lint || true'
+            }
           }
         }
         stage('Unit tests') {
           agent {
             docker { image 'node:24-alpine'; reuseNode true }
           }
-          steps {
-            sh 'npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml'
+                    steps {
+            dir('tp9') {
+              sh 'npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml'
+            }
           }
         }
       }
     }
 
     stage('Build') {
-      steps {
-        sh 'docker build -t ${IMAGE_NAME}:${SHORT_SHA} --label org.opencontainers.image.revision=${GIT_COMMIT} .'
+            steps {
+        dir('tp9') {
+          sh 'docker build -t ${IMAGE_NAME}:${SHORT_SHA} --label org.opencontainers.image.revision=${GIT_COMMIT} .'
+        }
       }
     }
 
