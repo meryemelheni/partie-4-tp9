@@ -81,7 +81,7 @@ pipeline {
 
   post {
     always {
-        junit testResults: 'reports/junit.xml', allowEmptyResults: true
+        junit testResults: 'tp9/reports/junit.xml', allowEmptyResults: true
     }
     success {
       sh 'echo "${IMAGE_NAME}:${SHORT_SHA}" > image.txt'
