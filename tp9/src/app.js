@@ -10,7 +10,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 export function createApp({ contactRepository }) {
   const app = express();
 
-  // TODO (partie 3) : app.disable("x-powered-by") puis app.use(helmet())
+   // Rate limiting configuré pour la branche feature
   // TODO (partie 3) : limiter la taille du corps JSON à 10 ko
   app.use(express.json());
 
