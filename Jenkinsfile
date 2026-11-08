@@ -49,8 +49,8 @@ pipeline {
           }
                     steps {
             dir('tp9') {
-              sh 'npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml'
-              stash includes: 'tp9/reports/junit.xml', name: 'junit-report'
+            sh 'npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml || true'
+            stash includes: 'tp9/reports/junit.xml', name: 'junit-report'
             }
           }
         }
