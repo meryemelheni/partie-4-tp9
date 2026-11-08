@@ -43,18 +43,16 @@ pipeline {
             }
           }
         }
-        stage('Unit tests') {
-          agent {
-            docker { image 'node:24-alpine'; reuseNode true }
-          }
-                    steps {
-            dir('tp9') {
-            sh 'npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml || true'
-            sh 'cp tp9/reports/junit.xml reports/junit.xml 2>/dev/null || true'
-            stash includes: 'tp9/reports/junit.xml', name: 'junit-report'
-            }
-          }
+            stage('Unit tests') {
+      agent {
+        docker { image 'node:24-alpine'; reuseNode true }
+      }
+      steps {
+        dir('tp9') {
+          sh 'npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml || true'
         }
+      }
+    }
       }
     }
 
@@ -81,10 +79,10 @@ pipeline {
     }
   }
 
-  post {
+    post {
     always {
-      unstash 'junit-report'
       junit testResults: 'tp9/reports/junit.xml', allowEmptyResults: true
+      archiveArtifacts artifacts: 'tp9/reports/junit.xml', allowEmptyArchive: true
     }
     success {
       sh 'echo "${IMAGE_NAME}:${SHORT_SHA}" > image.txt'
